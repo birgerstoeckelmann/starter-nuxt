@@ -10,13 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.4",
-    "nuxt": "^3.16.2",
-    "tailwindcss": "^4.1.4",
+    "@tailwindcss/vite": "^4.1.18",
+    "nuxt": "^4.2.2",
+    "tailwindcss": "^4.1.18",
     "vue": "latest"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.10",
-    "@tailwindcss/typography": "^0.5.16"
-  }
+    "@tailwindcss/typography": "^0.5.19"
+  },
+  "version": "0.0.1"
 }
