@@ -44,7 +44,7 @@ const {
 
 watch([isPreview, previewToken], () => {
   if (isPreview.value && previewToken.value) {
-    fetchPageData(currentPage.value)
+    fetchPageData()
   }
 })
 
