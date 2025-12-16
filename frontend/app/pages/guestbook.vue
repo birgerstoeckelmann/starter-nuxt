@@ -4,8 +4,6 @@ import { usePreview } from '@/composables/usePreview'
 import { GUESTBOOK_QUERY } from '@/queries/guestbook.mjs'
 import { ref } from 'vue'
 import { useHead } from '#imports'
-import PostList from '@/components/postList.vue'
-import PostForm from '@/components/postForm.vue'
 
 // Composables
 const graphql = useGraphQL()
@@ -23,7 +21,7 @@ const {
   pending: loading,
   refresh: refreshContent
 } = await useAsyncData(
-  'guestbook',
+  'guestbook_page',
   async () => {
     try {
       const result = await graphql.query(GUESTBOOK_QUERY, {}, {

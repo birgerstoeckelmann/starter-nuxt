@@ -14,7 +14,7 @@ const address = computed(() => props.globalData?.address?.[0] || null)
 
 <template>
   <footer class="bg-slate-50 py-6 px-2 text-sm">
-    <address 
+    <address
       v-if="address"
       class="container mx-auto not-italic"
     >
@@ -34,7 +34,7 @@ const address = computed(() => props.globalData?.address?.[0] || null)
       </p>
     </address>
     <div v-else class="container mx-auto">
-      <tip>Add an address by visiting Entries &rarr; Globals in the control panel!</tip>
+      <Tip>Add an address by visiting Entries &rarr; Globals in the control panel!</Tip>
     </div>
   </footer>
 </template>

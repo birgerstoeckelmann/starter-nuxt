@@ -1,7 +1,7 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from '#app'
 
-export function usePaginatedData(fetchData, initialItemsPerPage = 4) {
+export function usePaginatedData(key, fetchData, initialItemsPerPage = 4) {
   const route = useRoute()
   const router = useRouter()
   
@@ -14,7 +14,7 @@ export function usePaginatedData(fetchData, initialItemsPerPage = 4) {
     pending: loading, 
     refresh 
   } = useAsyncData(
-    `paginated-data-${currentPage.value}`,
+    `${key}-paginated-data-${currentPage.value}`,
     () => fetchData(currentPage.value, itemsPerPage.value),
     {
       watch: [currentPage]

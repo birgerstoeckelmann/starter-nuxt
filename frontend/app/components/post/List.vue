@@ -18,7 +18,7 @@ const fetchPosts = async (page, perPage) => {
     }, {
       previewToken: props.previewToken
     })
-    
+
     return {
       posts: result?.guestbookPostsEntries || [],
       total: result?.entryCount || 0
@@ -37,7 +37,7 @@ const {
   loading,
   updateCurrentPage,
   refresh
-} = usePaginatedData(fetchPosts)
+} = usePaginatedData('guestbook-posts', fetchPosts)
 
 defineExpose({
   refresh
@@ -48,11 +48,11 @@ defineExpose({
   <div v-if="loading" class="py-4">
     Loading...
   </div>
-  
+
   <div v-else-if="error" class="py-4 text-red-600">
     {{ error.message }}
   </div>
-  
+
   <div v-else>
     <div v-if="data?.posts?.length > 0">
       <ol class="mb-2 divide-y divide-slate-300">
@@ -66,10 +66,10 @@ defineExpose({
         </li>
       </ol>
       <Pagination
-        v-if="totalPages > 1"
-        :currentPage="currentPage"
-        :totalPages="totalPages"
-        @update:currentPage="updateCurrentPage"
+          v-if="totalPages > 1"
+          :currentPage="currentPage"
+          :totalPages="totalPages"
+          @update:currentPage="updateCurrentPage"
       />
     </div>
     <p v-else class="text-2xl">No entries yet. Create one using the form.</p>
