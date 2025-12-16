@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
   import { useFlashes } from '~/composables/useFlashes'
 
   const { flashes } = useFlashes()

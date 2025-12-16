@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useGraphQL } from '@/composables/useGraphQL'
 import { usePaginatedData } from '@/composables/usePaginatedData'
 import { GUESTBOOK_POSTS_QUERY } from '@/queries/guestbookPosts.mjs'
@@ -10,7 +10,7 @@ const props = defineProps({
   }
 })
 
-const fetchPosts = async (page, perPage) => {
+const fetchPosts = async (page: number, perPage: number) => {
   try {
     const result = await useGraphQL().query(GUESTBOOK_POSTS_QUERY, {
       limit: perPage,
@@ -54,7 +54,7 @@ defineExpose({
   </div>
 
   <div v-else>
-    <div v-if="data?.posts?.length > 0">
+    <div v-if="data?.posts && data?.posts?.length > 0">
       <ol class="mb-2 divide-y divide-slate-300">
         <li v-for="post in data.posts" :key="post.id">
           <article class="text-xl py-6">

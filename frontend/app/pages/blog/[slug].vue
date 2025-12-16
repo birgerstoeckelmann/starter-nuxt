@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useRoute } from '#app'
 import { useGraphQL } from '@/composables/useGraphQL'
 import { usePreview } from '@/composables/usePreview'
@@ -16,14 +16,14 @@ if (isPreview.value) {
   definePageMeta({ ssr: false })
 }
 
-const { data, error, refresh } = await useAsyncData(
+const { data, error, pending, refresh } = await useAsyncData(
   `post-${route.params.slug}`,
   async () => {
     try {
       const result = await graphql.query(BLOG_POSTS_QUERY, {
         slug: route.params.slug
       }, {
-        previewToken: previewToken.value
+        previewToken: previewToken.value as string
       })
       
       if (!result?.blogPostsEntries?.length) {

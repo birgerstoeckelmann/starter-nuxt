@@ -1,14 +1,9 @@
-<script setup>
+<script setup lang="ts">
 const route = useRoute()
 
-defineProps({
-  pages: {
-    type: Array,
-    default: () => []
-  }
-})
+const { pages = [] } = defineProps<{pages: {id: number, uri: string, title: string}[]}>()
 
-const isCurrentPage = (path) => route.path === path
+const isCurrentPage = (path: string) => route.path === path
 </script>
 
 <template>
@@ -19,7 +14,7 @@ const isCurrentPage = (path) => route.path === path
           to="/blog" 
           class="block p-2 hover:underline text-red-600 hover:text-red-600"
           active-class="text-red-600"
-          :aria-current="isCurrentPage('/blog') ? 'page' : null"
+          :aria-current="isCurrentPage('/blog') ? 'page' : undefined"
         >
           Blog
         </NuxtLink>
@@ -29,7 +24,7 @@ const isCurrentPage = (path) => route.path === path
           to="/guestbook" 
           class="block p-2 hover:underline text-red-600 hover:text-red-600"
           active-class="text-red-600"
-          :aria-current="isCurrentPage('/guestbook') ? 'page' : null"
+          :aria-current="isCurrentPage('/guestbook') ? 'page' : undefined"
         >
           Guestbook
         </NuxtLink>
@@ -39,7 +34,7 @@ const isCurrentPage = (path) => route.path === path
           :to="`/${page.uri}`" 
           class="block p-2 hover:underline text-red-600 hover:text-red-600"
           active-class="text-red-600"
-          :aria-current="isCurrentPage(`/${page.uri}`) ? 'page' : null"
+          :aria-current="isCurrentPage(`/${page.uri}`) ? 'page' : undefined"
         >
           {{ page.title }}
         </NuxtLink>

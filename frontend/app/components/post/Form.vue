@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useGraphQL } from '~/composables/useGraphQL'
 import { CREATE_POST_MUTATION } from '~/queries/post.mjs'
@@ -12,7 +12,7 @@ const loading = ref(false)
 
 const emit = defineEmits(['post-submitted'])
 
-const generateTitle = (text) => {
+const generateTitle = (text: string) => {
   const words = text.split(' ').slice(0, 3).join(' ').trim()
   return `Post: ${words}${words ? '...' : ''}`
 }
@@ -56,7 +56,7 @@ const submitPost = async () => {
     addFlash('Message posted successfully', 'success')
     message.value = ''
     emit('post-submitted')
-  } catch (err) {
+  } catch (err: any) {
     addFlash(`Error posting message: ${err.message}`, 'error')
     console.error('Error creating post:', err)
   } finally {

@@ -1,9 +1,10 @@
-<script setup>
+<script setup lang="ts">
 import { useGraphQL } from '@/composables/useGraphQL'
 import { usePreview } from '@/composables/usePreview'
 import { GUESTBOOK_QUERY } from '@/queries/guestbook.mjs'
 import { ref } from 'vue'
 import { useHead } from '#imports'
+import {PostList} from "#components";
 
 // Composables
 const graphql = useGraphQL()
@@ -25,11 +26,11 @@ const {
   async () => {
     try {
       const result = await graphql.query(GUESTBOOK_QUERY, {}, {
-        previewToken: previewToken.value
+        previewToken: previewToken.value as string
       })
       
       return result?.guestbookEntries?.[0] || {}
-    } catch (err) {
+    } catch (err: any) {
       throw createError({ 
         statusCode: 404,
         message: `Failed to fetch guestbook data: ${err.message}`
@@ -42,7 +43,7 @@ const {
 )
 
 // Post list refresh handling
-const postListRef = ref(null)
+const postListRef: Ref<typeof PostList|null> = ref(null)
 const handleNewPost = async () => {
   if (postListRef.value) {
     await postListRef.value.refresh()
@@ -102,7 +103,7 @@ useHead(() => ({
         <section class="mb-12">
           <PostList 
             ref="postListRef"
-            :preview-token="previewToken"
+            :preview-token="previewToken as string"
           />
         </section>
 

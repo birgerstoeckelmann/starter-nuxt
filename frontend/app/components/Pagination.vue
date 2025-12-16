@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 // Define props
 const props = defineProps({
   currentPage: {

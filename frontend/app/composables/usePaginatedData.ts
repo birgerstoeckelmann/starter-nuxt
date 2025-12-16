@@ -1,21 +1,23 @@
 import { ref, computed, watch } from 'vue'
 import { useRoute, useRouter } from '#app'
 
-export function usePaginatedData(key, fetchData, initialItemsPerPage = 4) {
+export function usePaginatedData(key: string, fetchData: Function, initialItemsPerPage = 4) {
   const route = useRoute()
   const router = useRouter()
   
-  const currentPage = ref(parseInt(route.query.page) || 1)
+  const currentPage = ref(parseInt(route.query.page as string) || 1)
   const itemsPerPage = ref(initialItemsPerPage)
 
-  const { 
-    data, 
+  const {
+    data,
     error, 
     pending: loading, 
     refresh 
   } = useAsyncData(
     `${key}-paginated-data-${currentPage.value}`,
-    () => fetchData(currentPage.value, itemsPerPage.value),
+    (): Promise<{
+      content: {title: string, pageSubheading: string, pageContent: string};
+      total: number, posts: any[]}> => fetchData(currentPage.value, itemsPerPage.value),
     {
       watch: [currentPage]
     }
@@ -26,7 +28,7 @@ export function usePaginatedData(key, fetchData, initialItemsPerPage = 4) {
     Math.ceil(totalPosts.value / itemsPerPage.value)
   )
 
-  const updateCurrentPage = async (newPage) => {
+  const updateCurrentPage = async (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages.value && newPage !== currentPage.value) {
       await router.push({
         query: { ...route.query, page: newPage }
@@ -36,7 +38,7 @@ export function usePaginatedData(key, fetchData, initialItemsPerPage = 4) {
 
   // Watch for route changes
   watch(() => route.query.page, async (newPage) => {
-    const page = parseInt(newPage) || 1
+    const page = parseInt(newPage as string) || 1
     if (page !== currentPage.value) {
       currentPage.value = page
     }

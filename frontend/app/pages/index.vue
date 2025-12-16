@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { usePreview } from '@/composables/usePreview'
 import { useGraphQL } from '@/composables/useGraphQL'
 import { HOME_QUERY } from '@/queries/home.mjs'
@@ -18,7 +18,7 @@ const { data, refresh } = await useAsyncData(
   async () => {
     try {
       const result = await graphql.query(HOME_QUERY, {}, {
-        previewToken: previewToken.value
+        previewToken: previewToken.value as string
       })
       return result.entry
     } catch (error) {

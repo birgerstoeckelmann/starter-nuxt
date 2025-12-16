@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useGraphQL } from '~/composables/useGraphQL'
 import { PAGE_QUERY } from '~/queries/pages.mjs'
 import { usePreview } from '@/composables/usePreview'
@@ -28,7 +28,7 @@ const { data: pageData, refresh } = await useAsyncData(
       const result = await graphql.query(PAGE_QUERY, {
         uri: slug.value
       }, {
-        previewToken: previewToken.value
+        previewToken: previewToken.value as string
       })
       
       if (!result?.entry) {
