@@ -66,7 +66,7 @@ const submitPost = async () => {
 </script>
 
 <template>
-  <form method="post" @submit.prevent="submitPost">
+  <form method="post" @submit.prevent="submitPost" author-id="">
     <div class="mb-6 mt-4">
       <label for="message" class="font-bold">Message</label>
       <textarea 

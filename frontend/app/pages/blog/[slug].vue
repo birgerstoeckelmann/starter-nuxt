@@ -116,7 +116,7 @@ useHead(() => ({
       Post not found
     </div>
 
-    <section v-if="hasNextPrev"class="bg-slate-100">
+    <section v-if="hasNextPrev" class="bg-slate-100">
         <div class="container mx-auto divide-y divide-slate-300 py-12 px-2">
           <h2 class="font-bold text-4xl mb-2">Other articles</h2>
           <div class="sm:grid sm:grid-cols-2 sm:gap-6">
