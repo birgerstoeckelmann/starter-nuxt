@@ -1,6 +1,6 @@
 # Craft CMS + Nuxt Starter
 
-A minimal, production-ready starter for [Nuxt 3](https://nuxt.com/) and [Craft CMS](https://craftcms.com/) projects. Check out the [features](#key-features), or [dive right in](#quick-start)!
+A minimal, production-ready starter for [Nuxt 4](https://nuxt.com/) and [Craft CMS](https://craftcms.com/) projects. Check out the [features](#key-features), or [dive right in](#quick-start)!
 
 > [!TIP]
 > Curious about Craft, but want to try it with a different framework? We have [other starter projects](https://craftcms.com/starters), too!
