@@ -18,6 +18,7 @@ interface Post extends Page {
   // blog post
   authorName?: string;
   authorId?: number;
+  category?: Category;
   // guestbook post
   textBlock?: string;
 }
