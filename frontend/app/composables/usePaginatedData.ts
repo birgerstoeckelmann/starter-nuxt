@@ -20,9 +20,9 @@ export function usePaginatedData(
   } = useAsyncData(
     `${key}-paginated-data-${currentPage.value}`,
     (): Promise<{
-      content: { title: string; pageSubheading: string; pageContent: string };
+      content: Page;
       total: number;
-      posts: any[];
+      posts: Post[];
     }> => fetchData(currentPage.value, itemsPerPage.value),
     {
       watch: [currentPage],
