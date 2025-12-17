@@ -67,7 +67,7 @@ The Craft [control panel](https://craftcms.com/docs/5.x/system/control-panel.htm
 
 ## Key Features
 
-This project includes basic support for a handful of Craft’s best features, in a tidy headless package built on [Nuxt 3](https://nuxt.com/).
+This project includes basic support for a handful of Craft’s best features, in a tidy headless package built on [Nuxt 4](https://nuxt.com/).
 
 ### GraphQL
 
