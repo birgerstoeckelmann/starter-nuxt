@@ -1,99 +1,95 @@
 <script setup lang="ts">
-import { useGraphQL } from '@/composables/useGraphQL'
-import { usePreview } from '@/composables/usePreview'
-import { GUESTBOOK_QUERY } from '@/queries/guestbook.mjs'
-import { ref } from 'vue'
-import { useHead } from '#imports'
-import {PostList} from "#components";
+import { useGraphQL } from "@/composables/useGraphQL";
+import { usePreview } from "@/composables/usePreview";
+import { GUESTBOOK_QUERY } from "@/queries/guestbook.mjs";
+import { ref } from "vue";
+import { useHead } from "#imports";
+import { PostList } from "#components";
 
 // Composables
-const graphql = useGraphQL()
-const { isPreview, previewToken } = usePreview()
+const graphql = useGraphQL();
+const { isPreview, previewToken } = usePreview();
 
 // Disable SSR for preview mode
 if (isPreview.value) {
-  definePageMeta({ ssr: false })
+  definePageMeta({ ssr: false });
 }
 
 // Data fetching
-const { 
-  data: content, 
-  error, 
+const {
+  data: content,
+  error,
   pending: loading,
-  refresh: refreshContent
+  refresh: refreshContent,
 } = await useAsyncData(
-  'guestbook_page',
+  "guestbook_page",
   async () => {
     try {
-      const result = await graphql.query(GUESTBOOK_QUERY, {}, {
-        previewToken: previewToken.value as string
-      })
-      
-      return result?.guestbookEntries?.[0] || {}
+      const result = await graphql.query(
+        GUESTBOOK_QUERY,
+        {},
+        {
+          previewToken: previewToken.value as string,
+        },
+      );
+
+      return result?.guestbookEntries?.[0] || {};
     } catch (err: any) {
-      throw createError({ 
+      throw createError({
         statusCode: 404,
-        message: `Failed to fetch guestbook data: ${err.message}`
-      })
+        message: `Failed to fetch guestbook data: ${err.message}`,
+      });
     }
   },
   {
-    watch: [previewToken]
-  }
-)
+    watch: [previewToken],
+  },
+);
 
 // Post list refresh handling
-const postListRef: Ref<typeof PostList|null> = ref(null)
+const postListRef: Ref<typeof PostList | null> = ref(null);
 const handleNewPost = async () => {
   if (postListRef.value) {
-    await postListRef.value.refresh()
+    await postListRef.value.refresh();
   }
-}
+};
 
 watch([isPreview, previewToken], () => {
   if (isPreview.value && previewToken.value) {
-    refreshContent()
+    refreshContent();
   }
-})
+});
 
 // Page title
 useHead(() => ({
-  title: content.value?.title || 'Guestbook'
-}))
+  title: content.value?.title || "Guestbook",
+}));
 </script>
 
 <template>
   <div>
     <!-- Loading state -->
-    <div v-if="loading" class="container mx-auto py-12 px-2">
-      Loading...
-    </div>
-    
+    <div v-if="loading" class="container mx-auto py-12 px-2">Loading...</div>
+
     <!-- Error state -->
     <div v-else-if="error" class="container mx-auto py-12 px-2 text-red-600">
       {{ error.message }}
     </div>
-    
+
     <!-- Content -->
     <template v-else>
       <header class="container mx-auto pt-12 pb-6 px-2">
         <h1 class="font-bold text-4xl sm:text-6xl lg:text-9xl">
           {{ content.title }}
         </h1>
-        <p 
-          v-if="content.pageSubheading" 
-          class="mt-4 text-2xl"
-        >
+        <p v-if="content.pageSubheading" class="mt-4 text-2xl">
           {{ content.pageSubheading }}
         </p>
       </header>
 
-      <section 
-        v-if="content.pageContent"
-        class="page__content"
-      >
-        <div 
-          class="container mx-auto py-12 px-2 text-balance" 
+      <section v-if="content.pageContent" class="page__content">
+        <div
+          class="container mx-auto py-12 px-2 text-balance"
           v-html="content.pageContent"
         />
       </section>
@@ -101,19 +97,16 @@ useHead(() => ({
       <div class="container mx-auto px-2 sm:grid gap-6 grid-cols-2">
         <!-- Posts list -->
         <section class="mb-12">
-          <PostList 
-            ref="postListRef"
-            :preview-token="previewToken as string"
-          />
+          <PostList ref="postListRef" :preview-token="previewToken as string" />
         </section>
 
         <!-- Post form -->
         <section>
           <div class="bg-slate-200 p-6 mb-9 rounded">
             <h2 class="font-bold text-3xl mb-4">Post an entry</h2>
-            <PostForm 
-              @post-submitted="handleNewPost" 
-              :author-id="content.authorId" 
+            <PostForm
+              @post-submitted="handleNewPost"
+              :author-id="content.authorId"
             />
           </div>
         </section>

@@ -1,71 +1,73 @@
-import {useRuntimeConfig} from '#app'
+import { useRuntimeConfig } from "#app";
 
 export function useGraphQL() {
+  const config = useRuntimeConfig();
 
-    const config = useRuntimeConfig()
+  const query = async (
+    query: string,
+    variables = {},
+    options: {
+      private?: boolean | null;
+      previewToken?: string | null;
+    } = {},
+  ) => {
+    try {
+      if (!config.public.CRAFT_URL) {
+        throw new Error("CRAFT_URL is not configured");
+      }
 
-    const query = async (query: string, variables = {}, options: {
-        private?: boolean | null,
-        previewToken?: string | null
-    } = {}) => {
+      let apiUrl = `${config.public.CRAFT_URL}/api`;
 
-        try {
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      };
 
-            if (!config.public.CRAFT_URL) {
-                throw new Error('CRAFT_URL is not configured')
-            }
+      // Add auth header if private flag is true
+      if (options.private) {
+        headers["Authorization"] = `Bearer ${config.public.GRAPHQL_TOKEN}`;
+      }
 
-            let apiUrl = `${config.public.CRAFT_URL}/api`
+      if (options.previewToken) {
+        headers["X-Craft-Token"] = options.previewToken;
+      }
 
-            const headers: Record<string, string> = {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            }
+      const response = await fetch(apiUrl, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          query,
+          variables,
+        }),
+        credentials: "include",
+      });
 
-            // Add auth header if private flag is true
-            if (options.private) {
-                headers['Authorization'] = `Bearer ${config.public.GRAPHQL_TOKEN}`
-            }
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${errorText}`,
+        );
+      }
 
-            if (options.previewToken) {
-                headers['X-Craft-Token'] = options.previewToken
-            }
+      const result = await response.json();
 
-            const response = await fetch(apiUrl, {
-                method: 'POST',
-                headers,
-                body: JSON.stringify({
-                    query,
-                    variables
-                }),
-                credentials: 'include'
-            })
+      if (!result || typeof result !== "object") {
+        throw new Error("Invalid response format");
+      }
 
-            if (!response.ok) {
-                const errorText = await response.text()
-                throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`)
-            }
+      if (result.errors) {
+        throw new Error(result.errors[0]?.message || "GraphQL error");
+      }
 
-            const result = await response.json()
-
-            if (!result || typeof result !== 'object') {
-                throw new Error('Invalid response format')
-            }
-
-            if (result.errors) {
-                throw new Error(result.errors[0]?.message || 'GraphQL error')
-            }
-
-            return JSON.parse(JSON.stringify(result.data))
-
-        } catch (err: any) {
-            console.error('GraphQL Error:', {
-                message: err.message,
-                craftUrl: config.public.CRAFT_URL
-            })
-            throw err
-        }
+      return JSON.parse(JSON.stringify(result.data));
+    } catch (err: any) {
+      console.error("GraphQL Error:", {
+        message: err.message,
+        craftUrl: config.public.CRAFT_URL,
+      });
+      throw err;
     }
+  };
 
-    return {query}
+  return { query };
 }

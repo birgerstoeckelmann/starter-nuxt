@@ -1,36 +1,40 @@
 <script setup lang="ts">
-import { watch, computed } from 'vue'
-import { useHead } from '#imports'
-import { usePaginatedData } from '@/composables/usePaginatedData'
-import { useGraphQL } from '@/composables/useGraphQL'
-import { usePreview } from '@/composables/usePreview'
-import { BLOG_QUERY } from '@/queries/blog.mjs'
+import { watch, computed } from "vue";
+import { useHead } from "#imports";
+import { usePaginatedData } from "@/composables/usePaginatedData";
+import { useGraphQL } from "@/composables/useGraphQL";
+import { usePreview } from "@/composables/usePreview";
+import { BLOG_QUERY } from "@/queries/blog.mjs";
 
-const graphql = useGraphQL()
-const { isPreview, previewToken, previewTimestamp } = usePreview()
+const graphql = useGraphQL();
+const { isPreview, previewToken, previewTimestamp } = usePreview();
 
 if (isPreview.value) {
-  definePageMeta({ ssr: false })
+  definePageMeta({ ssr: false });
 }
 
 const fetchBlogData = async (page: number, perPage: number) => {
   try {
-    const result = await graphql.query(BLOG_QUERY, {
-      limit: perPage,
-      offset: (page - 1) * perPage
-    }, {
-      previewToken: previewToken.value as string
-    })
-    
+    const result = await graphql.query(
+      BLOG_QUERY,
+      {
+        limit: perPage,
+        offset: (page - 1) * perPage,
+      },
+      {
+        previewToken: previewToken.value as string,
+      },
+    );
+
     return {
       content: result?.blogEntries?.[0] || {},
       posts: result?.blogPostsEntries || [],
-      total: result?.entryCount || 0
-    }
+      total: result?.entryCount || 0,
+    };
   } catch (error) {
-    throw error
+    throw error;
   }
-}
+};
 
 const {
   currentPage,
@@ -39,22 +43,22 @@ const {
   loading,
   error,
   updateCurrentPage,
-  fetchPageData
-} = usePaginatedData('blog-entries', fetchBlogData)
+  fetchPageData,
+} = usePaginatedData("blog-entries", fetchBlogData);
 
 watch([isPreview, previewToken], () => {
   if (isPreview.value && previewToken.value) {
-    fetchPageData()
+    fetchPageData();
   }
-})
+});
 
-const posts = computed(() => data.value?.posts || [])
-const content = computed(() => data.value?.content || null)
+const posts = computed(() => data.value?.posts || []);
+const content = computed(() => data.value?.content || null);
 
 // Set the page title
 useHead(() => ({
-  title: content.value?.title || ''
-}))
+  title: content.value?.title || "",
+}));
 </script>
 
 <template>
@@ -63,15 +67,22 @@ useHead(() => ({
     <div v-else-if="error">Error: {{ error.message }}</div>
     <div v-else>
       <header class="container mx-auto pt-12 pb-6 px-2 text-2xl">
-        <h1 class="font-bold text-4xl sm:text-6xl lg:text-9xl">{{ content?.title }}</h1>
-        <p v-if="content?.pageSubheading" class="mt-4">{{ content.pageSubheading }}</p>
+        <h1 class="font-bold text-4xl sm:text-6xl lg:text-9xl">
+          {{ content?.title }}
+        </h1>
+        <p v-if="content?.pageSubheading" class="mt-4">
+          {{ content.pageSubheading }}
+        </p>
       </header>
       <section class="page__content">
-        <div class="container mx-auto py-12 px-2 text-balance" v-html="content?.pageContent"></div>
+        <div
+          class="container mx-auto py-12 px-2 text-balance"
+          v-html="content?.pageContent"
+        ></div>
       </section>
       <section class="container mx-auto mb-6 px-2 divide-y divide-slate-300">
         <div v-if="posts.length > 0" class="sm:grid sm:grid-cols-2 sm:gap-6">
-          <Teaser 
+          <Teaser
             v-for="entry in posts"
             :key="entry.id"
             :entry="entry"

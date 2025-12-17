@@ -2,9 +2,9 @@
 const props = defineProps({
   image: {
     type: Object,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 </script>
 
 <template>

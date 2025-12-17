@@ -37,4 +37,4 @@ export const BLOG_POSTS_QUERY = `
       }
     }
   }
-`
+`;

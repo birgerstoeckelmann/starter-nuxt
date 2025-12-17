@@ -2,12 +2,12 @@
 const props = defineProps({
   entry: {
     type: Object,
-    required: true
+    required: true,
   },
   featured: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 </script>
 
@@ -15,21 +15,21 @@ const props = defineProps({
   <article class="py-6 mb-12">
     <figure v-if="featured">
       <NuxtLink
-        :to="`/${entry.uri}`" 
+        :to="`/${entry.uri}`"
         class="text-red-600 hover:underline focus:underline cursor-pointer block mb-4"
       >
-        <img 
+        <img
           v-if="entry.image && entry.image.length > 0"
-          :src="entry.image[0].url" 
-          :alt="entry.image[0].alt" 
+          :src="entry.image[0].url"
+          :alt="entry.image[0].alt"
         />
         <div v-else class="bg-slate-200 aspect-video hover:bg-slate-300"></div>
       </NuxtLink>
     </figure>
     <div class="mb-4">
       <h2 class="font-bold mb-2 text-4xl">
-        <NuxtLink 
-          :to="`/${entry.uri}`" 
+        <NuxtLink
+          :to="`/${entry.uri}`"
           class="text-red-600 hover:underline focus:underline cursor-pointer"
         >
           {{ entry.title }}
@@ -37,7 +37,9 @@ const props = defineProps({
       </h2>
       <p v-if="entry.pageSubheading">{{ entry.pageSubheading }}</p>
       <p>
-        <time class="text-sm" :datetime="entry.postDate">{{ entry.postDate }}</time>
+        <time class="text-sm" :datetime="entry.postDate">{{
+          entry.postDate
+        }}</time>
       </p>
     </div>
   </article>

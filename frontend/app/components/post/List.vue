@@ -1,33 +1,37 @@
 <script setup lang="ts">
-import { useGraphQL } from '@/composables/useGraphQL'
-import { usePaginatedData } from '@/composables/usePaginatedData'
-import { GUESTBOOK_POSTS_QUERY } from '@/queries/guestbookPosts.mjs'
+import { useGraphQL } from "@/composables/useGraphQL";
+import { usePaginatedData } from "@/composables/usePaginatedData";
+import { GUESTBOOK_POSTS_QUERY } from "@/queries/guestbookPosts.mjs";
 
 const props = defineProps({
   previewToken: {
     type: String,
-    default: null
-  }
-})
+    default: null,
+  },
+});
 
 const fetchPosts = async (page: number, perPage: number) => {
   try {
-    const result = await useGraphQL().query(GUESTBOOK_POSTS_QUERY, {
-      limit: perPage,
-      offset: (page - 1) * perPage
-    }, {
-      previewToken: props.previewToken
-    })
+    const result = await useGraphQL().query(
+      GUESTBOOK_POSTS_QUERY,
+      {
+        limit: perPage,
+        offset: (page - 1) * perPage,
+      },
+      {
+        previewToken: props.previewToken,
+      },
+    );
 
     return {
       posts: result?.guestbookPostsEntries || [],
-      total: result?.entryCount || 0
-    }
+      total: result?.entryCount || 0,
+    };
   } catch (err) {
-    console.error('GraphQL Error:', err)
-    throw err
+    console.error("GraphQL Error:", err);
+    throw err;
   }
-}
+};
 
 const {
   currentPage,
@@ -36,18 +40,16 @@ const {
   error,
   loading,
   updateCurrentPage,
-  refresh
-} = usePaginatedData('guestbook-posts', fetchPosts)
+  refresh,
+} = usePaginatedData("guestbook-posts", fetchPosts);
 
 defineExpose({
-  refresh
-})
+  refresh,
+});
 </script>
 
 <template>
-  <div v-if="loading" class="py-4">
-    Loading...
-  </div>
+  <div v-if="loading" class="py-4">Loading...</div>
 
   <div v-else-if="error" class="py-4 text-red-600">
     {{ error.message }}
@@ -66,10 +68,10 @@ defineExpose({
         </li>
       </ol>
       <Pagination
-          v-if="totalPages > 1"
-          :currentPage="currentPage"
-          :totalPages="totalPages"
-          @update:currentPage="updateCurrentPage"
+        v-if="totalPages > 1"
+        :currentPage="currentPage"
+        :totalPages="totalPages"
+        @update:currentPage="updateCurrentPage"
       />
     </div>
     <p v-else class="text-2xl">No entries yet. Create one using the form.</p>

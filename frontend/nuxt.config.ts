@@ -3,49 +3,48 @@
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineNuxtConfig({
-    app: {
-        head: {
-            titleTemplate: '%s | ' + process.env.SITE_NAME,
-            title: process.env.SITE_NAME
-        }
+  compatibilityDate: "2025-07-15",
+  app: {
+    head: {
+      titleTemplate: "%s | " + process.env.SITE_NAME,
+      title: process.env.SITE_NAME,
     },
-    css: [
-        '@/assets/styles/globals.css'
-    ],
-    compatibilityDate: '2025-07-15',
-    devtools: {enabled: true},
+  },
+  css: ["@/assets/styles/globals.css"],
+  devtools: { enabled: true },
+  devServer: {
+    host: "0.0.0.0",
+    port: 3000,
+  },
+  runtimeConfig: {
+    public: {
+      GRAPHQL_TOKEN: process.env.GRAPHQL_TOKEN,
+      CRAFT_URL: process.env.CRAFT_URL,
+      BASE_URL: process.env.BASE_URL,
+      SITE_NAME: process.env.SITE_NAME,
+    },
+  },
+  typescript: {
+    typeCheck: true,
+  },
+  vite: {
+    plugins: [tailwindcss()],
+    server: {
+      hmr: {
+        protocol: "wss",
+        host: process.env.BASE_URL?.replace("https://", ""),
+        port: 3000,
+      },
+      allowedHosts: ["starter-nuxt.ddev.site", ".ddev.site"],
+    },
+  },
+  nitro: {
     devServer: {
-        host: '0.0.0.0',
-        port: 3000
+      watch: ["./server"],
     },
-    runtimeConfig: {
-        public: {
-            GRAPHQL_TOKEN: process.env.GRAPHQL_TOKEN,
-            CRAFT_URL: process.env.CRAFT_URL,
-            BASE_URL: process.env.BASE_URL,
-            SITE_NAME: process.env.SITE_NAME
-        }
-    },
-    vite: {
-        plugins: [
-            tailwindcss()
-        ],
-        server: {
-            hmr: {
-                protocol: 'wss',
-                host: process.env.BASE_URL?.replace('https://', ''),
-                port: 3000
-            },
-            allowedHosts: [
-                'starter-nuxt.ddev.site',
-                '.ddev.site'
-            ]
-        }
-    },
-    nitro: {
-        devServer: {
-            watch: ['./server']
-        }
-    },
-    modules: ['@nuxtjs/i18n']
-})
+  },
+  modules: ["@nuxtjs/i18n", "@nuxt/eslint"],
+  i18n: {
+    defaultLocale: "en",
+  },
+});

@@ -1,22 +1,11 @@
 <script setup lang="ts">
-const props = defineProps({
-  globalData: {
-    type: Object,
-    default: () => ({
-      logo: {
-        url: '',
-        alt: ''
-      }
-    })
-  },
-  pages: {
-    type: Array,
-    default: () => []
-  }
-})
+const { globalData = { logo: { url: "", alt: "" } }, pages = [] } =
+  defineProps<{ globalData: GlobalData; pages: Page[] }>();
 
-const { public: { SITE_NAME } } = useRuntimeConfig()
-const siteName = computed(() => SITE_NAME || 'Site Name')
+const {
+  public: { SITE_NAME },
+} = useRuntimeConfig();
+const siteName = computed(() => SITE_NAME || "Site Name");
 </script>
 
 <template>

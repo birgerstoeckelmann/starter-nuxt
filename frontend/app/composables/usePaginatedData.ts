@@ -1,48 +1,61 @@
-import { ref, computed, watch } from 'vue'
-import { useRoute, useRouter } from '#app'
+import { ref, computed, watch } from "vue";
+import { useRoute, useRouter } from "#app";
 
-export function usePaginatedData(key: string, fetchData: Function, initialItemsPerPage = 4) {
-  const route = useRoute()
-  const router = useRouter()
-  
-  const currentPage = ref(parseInt(route.query.page as string) || 1)
-  const itemsPerPage = ref(initialItemsPerPage)
+export function usePaginatedData(
+  key: string,
+  fetchData: Function,
+  initialItemsPerPage = 4,
+) {
+  const route = useRoute();
+  const router = useRouter();
+
+  const currentPage = ref(parseInt(route.query.page as string) || 1);
+  const itemsPerPage = ref(initialItemsPerPage);
 
   const {
     data,
-    error, 
-    pending: loading, 
-    refresh 
+    error,
+    pending: loading,
+    refresh,
   } = useAsyncData(
     `${key}-paginated-data-${currentPage.value}`,
     (): Promise<{
-      content: {title: string, pageSubheading: string, pageContent: string};
-      total: number, posts: any[]}> => fetchData(currentPage.value, itemsPerPage.value),
+      content: { title: string; pageSubheading: string; pageContent: string };
+      total: number;
+      posts: any[];
+    }> => fetchData(currentPage.value, itemsPerPage.value),
     {
-      watch: [currentPage]
-    }
-  )
+      watch: [currentPage],
+    },
+  );
 
-  const totalPosts = computed(() => data.value?.total || 0)
-  const totalPages = computed(() => 
-    Math.ceil(totalPosts.value / itemsPerPage.value)
-  )
+  const totalPosts = computed(() => data.value?.total || 0);
+  const totalPages = computed(() =>
+    Math.ceil(totalPosts.value / itemsPerPage.value),
+  );
 
   const updateCurrentPage = async (newPage: number) => {
-    if (newPage > 0 && newPage <= totalPages.value && newPage !== currentPage.value) {
+    if (
+      newPage > 0 &&
+      newPage <= totalPages.value &&
+      newPage !== currentPage.value
+    ) {
       await router.push({
-        query: { ...route.query, page: newPage }
-      })
+        query: { ...route.query, page: newPage },
+      });
     }
-  }
+  };
 
   // Watch for route changes
-  watch(() => route.query.page, async (newPage) => {
-    const page = parseInt(newPage as string) || 1
-    if (page !== currentPage.value) {
-      currentPage.value = page
-    }
-  })
+  watch(
+    () => route.query.page,
+    async (newPage) => {
+      const page = parseInt(newPage as string) || 1;
+      if (page !== currentPage.value) {
+        currentPage.value = page;
+      }
+    },
+  );
 
   return {
     currentPage,
@@ -53,6 +66,6 @@ export function usePaginatedData(key: string, fetchData: Function, initialItemsP
     error,
     updateCurrentPage,
     fetchPageData: refresh,
-    refresh
-  }
+    refresh,
+  };
 }

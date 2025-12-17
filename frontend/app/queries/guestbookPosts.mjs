@@ -10,4 +10,4 @@ export const GUESTBOOK_POSTS_QUERY = `
     }
     entryCount(section: "guestbookPosts")
   }
-`
+`;

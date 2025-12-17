@@ -9,4 +9,4 @@ export const CREATE_POST_MUTATION = `
       textBlock
     }
   }
-`
+`;

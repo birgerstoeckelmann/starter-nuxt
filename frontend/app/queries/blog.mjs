@@ -26,4 +26,4 @@ export const BLOG_QUERY = `
     }
     entryCount(section: "blogPosts")
   }
-`
+`;
