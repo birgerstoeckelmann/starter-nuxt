@@ -105,7 +105,7 @@ Nuxt lives in the `frontend/` directory. All NPM commands should be executed her
 
 See `frontend/nuxt.config.js` to [customize Nuxt](https://nuxt.com/docs/getting-started/configuration), or read about the rest of its [directory structure](https://nuxt.com/docs/guide/directory-structure).
 
-Routing is handled primarily via the [`pages/`](https://nuxt.com/docs/guide/directory-structure/pages) directory, and GraphQL queries are centralized in `queries/`.
+Routing is handled primarily via the [`app/pages/`](https://nuxt.com/docs/guide/directory-structure/pages) directory, and GraphQL queries are centralized in `app/queries/`.
 
 ## Tips + Tricks
 
