@@ -1,10 +1,10 @@
 diff --git a/node_modules/vite-plugin-checker/dist/checkers/vueTsc/prepareVueTsc.js b/node_modules/vite-plugin-checker/dist/checkers/vueTsc/prepareVueTsc.js
-index a1271c8..0f1c206 100644
+index a1271c8..d16126c 100644
 --- a/node_modules/vite-plugin-checker/dist/checkers/vueTsc/prepareVueTsc.js
 +++ b/node_modules/vite-plugin-checker/dist/checkers/vueTsc/prepareVueTsc.js
 @@ -1,4 +1,5 @@
  import { access, cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
-+import { rmdirSync, cpSync } from "node:fs";
++import { rmSync, cpSync } from "node:fs"
  import { createRequire } from "node:module";
  import path, { dirname } from "node:path";
  import { fileURLToPath } from "node:url";
@@ -14,7 +14,7 @@ index a1271c8..0f1c206 100644
    if (shouldBuildFixture) {
 -    await rm(targetTsDir, { force: true, recursive: true });
 +    //await rm(targetTsDir, { force: true, recursive: true });
-+    rmdirSync(targetTsDir, { force: true, recursive: true });
++    rmSync(targetTsDir, { recursive: true, force: true });
      await mkdir(targetTsDir, { recursive: true });
      const sourceTsDir = path.resolve(_require.resolve("typescript"), "../..");
 -    await cp(sourceTsDir, targetTsDir, { recursive: true });
