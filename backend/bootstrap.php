@@ -3,6 +3,9 @@
  * Shared bootstrap file
  */
 
+$errorLevel = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED;
+error_reporting($errorLevel);
+
 // Define path constants
 define('CRAFT_BASE_PATH', __DIR__);
 define('CRAFT_VENDOR_PATH', CRAFT_BASE_PATH . '/vendor');
